@@ -1,0 +1,184 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+body {
+    background-color: #E8EAF6;
+    padding-left: 5%;
+    padding-right: 5%;
+    min-width: 600px;
+}
+
+header {
+    background-color: #1A237E;
+    color: white;
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+header h1 {
+    font-weight: bold;
+    font-size: 1.5em;
+    font-family: "sans-serif";
+}
+
+header h4 {
+    font-style: italic;
+    font-family: "Times New Roman";
+}
+
+nav {
+    background-color: #3F51B5;
+    color: white;
+    padding-left: 1em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    word-spacing: 0.6em;
+}
+
+nav a {
+    padding: 0.3em;
+}
+
+nav a:link {
+    color: #00B0FF;
+}
+
+nav a:hover {
+    color: white;
+    background-color: #F50057;
+}
+
+main {
+    margin: 0.5em 0 0.5em 0;
+    background-color: white;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+* section h2 {
+    background-color: #7986CB;
+    color: white;
+    font-family: "sans-serif";
+    font-weight: bold;
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+figure img {
+    vertical-align: bottom;
+    display: block;
+    width: 100%;
+    padding: 0;
+}
+
+figure figcaption {
+    background-color: #C5CAE9;
+    color: #7990A3;
+    font-style: italic;
+    font-family: "Times New Roman";
+    padding-left: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+#sc1 div {
+    padding-left: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-right: 1em;
+}
+
+#text {
+    font-family: "Times New Roman";
+    padding-bottom: 1em;
+}
+
+section a {
+    font-weight: bold;
+    color: #00B0FF;
+}
+
+#img {
+    text-align: right;
+}
+
+* section {
+    /*border-style: solid;*/
+    /*border-color: #C5CAE9;*/
+    border: 1px solid #C5CAE9;
+}
+
+#sc1, #sc2 {
+    margin-bottom: 0.5em;
+}
+
+#images img{
+    padding: 0;
+    margin-bottom: -4px;
+}
+
+#sc3 div {
+    padding-left: 1em;
+    padding-bottom: 1em;
+}
+
+#comment {
+    font-family: "Times New Roman";
+}
+
+* #comment p {
+    padding-bottom: 0.5em;
+}
+
+* #comment .shallow {
+    color: #C5CAE9;
+    font-style: italic;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+* .pink {
+    color: #F5A2C1;
+}
+
+* hr {
+    margin: 0;
+}
+
+footer {
+    background-color: #3F51B5;
+    color: white;
+    font-weight: bold;
+    font-family: "sans-serif";
+    padding-left: 1em;
+    padding-top: 1.3em;
+    padding-bottom: 1.3em;
+}
+
+footer a:link {
+    color: #00B0FF;
+}
+
+footer p {
+    padding-top: 0.6em;
+    font-style: italic;
+}
