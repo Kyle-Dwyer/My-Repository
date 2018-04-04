@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lab 04</title>
+    <link rel="stylesheet" href="./css/reset.css"/>
+    <link rel="stylesheet" href="./css/Lab04.css"/>
+</head>
+<body>
+<header>
+    <h1>Share Your Travels</h1>
+    <p>let us know where you've been</p>
+</header>
+<main>
+    <section>
+        <form method="post" action="http://www.randyconnolly.com/tests/process.php">
+            <fieldset>
+                <legend>PHOTO DETAILS</legend>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <p>
+                                <label>Tittle</label><br>
+                                <input type="text" name="title" value="Give your photo a descritive name"><br>
+                            </p>
+                            <p>
+                                <label>Description</label><br>
+                                <textarea rows="6">Adding s rich description will help with search results</textarea>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <label>Continent</label><br>
+                                <select>
+                                    <option value="opt1">Choose coninent</option>
+                                </select><br>
+                            </p>
+                            <p>
+                                <label>Country</label><br>
+                                <select>
+                                    <option value="opt2">Choose country</option>
+                                </select><br>
+                            </p>
+                            <p>
+                                <label>City</label><br>
+                                <input type="text" name="city">
+                            </p>
+                        </td>
+                        <td>
+                            <div>
+                                <fieldset>
+                                    <label>Copyright?</label><br>
+                                    <input type="radio" value="radio1"> All rights reversed<br>
+                                    <input type="radio" value="radio2" checked="checked"> Creative Commons<br>
+                                </fieldset>
+                            </div>
+                            <div>
+                                <fieldset>
+                                    <label>Creative Commons Types</label><br>
+                                    <input type="checkbox" value="1"> Attibution<br>
+                                    <input type="checkbox" value="2"> Noncommercial<br>
+                                    <input type="checkbox" value="3"> No Derivative Works<br>
+                                </fieldset>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="deep">
+                            <label>I accept the software license</label>
+                            <input type="checkbox" value="4">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <label>Rate this photo:</label><br>
+                                <input type="number" value="0" min="0" max="10" step="1" name="number"><br>
+                            </p>
+                            <p>
+                                <label>Color Collection:</label><br>
+                                <input type="color" name="color">
+                            </p>
+                        </td>
+                        <td>
+                            <div>
+                                <fieldset>
+                                    <label>Date Taken:</label><br>
+                                    <input type="date" name="date"><br>
+                                    <label>Time Taken</label><br>
+                                    <input type="time" name="time"><br>
+                                </fieldset>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" id="buttons">
+                            <div class="deep">
+                            <input type="submit" value="提交">
+                            <input type="reset" value="Clear Form">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </section>
+</main>
+</body>
+</html>
