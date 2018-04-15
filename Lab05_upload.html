@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Upload</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <h1 class="font-weight-bold">
+                    Share Your Travels
+                </h1>
+                <h6 class="font-italic">
+                    Let us know where you've been
+                </h6>
+            </div>
+            <div class="col-md-8">
+                <nav class="navbar navbar-expand-sm navbar-light">
+                    <ul class="navbar-nav justify-content-end nav-fill col-md-12 offset-md-1">
+                        <li class="nav-item text-center col-md-4">
+                            <a class="nav-link" href="./Lab05_gallery.html">Gallery</a>
+                        </li>
+                        <li class="nav-item text-center col-md-4">
+                            <a class="nav-link" href="#">Feeling Lucky</a>
+                        </li>
+                        <li class="nav-item text-center col-md-4">
+                            <a class="nav-link" href="#">User</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<main class="container">
+    <div class="card">
+        <div class="card-body">
+            <form method="post" action="http://www.randyconnolly.com/tests/process.php">
+                <fieldset>
+                    <legend>Photo Details</legend>
+                    <label>Tittle</label>
+                    <input type="text" placeholder="Give your photo a descriptive name" class="form-control"><br>
+                    <label>Description</label>
+                    <textarea placeholder="Adding a rich description will help with search results"
+                              class="form-control"></textarea>
+                    <label>Continent</label>
+                    <select class="form-control">
+                        <option value="opt1">Choose coninent</option>
+                    </select><br>
+                    <label>Country</label>
+                    <select class="form-control">
+                        <option value="opt2">Choose country</option>
+                    </select><br>
+                    <label>City</label>
+                    <input type="text" name="city" class="form-control"><br>
+                    <div>
+                        <fieldset>
+                            <label>Copyright?</label>
+                            <div>
+                                <input type="radio" name="copyright" value="1">All rights reserved</input>
+                            </div>
+                            <div>
+                                <input type="radio" name="copyright" value="2" checked>Creative Commons</input>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <br>
+                    <div>
+                        <fieldset>
+                            <label>Creative Commons Types</label>
+                            <div>
+                                <input type="checkbox" name="cct" value="1"> Attibution
+                                <input type="checkbox" name="cct" value="2"> Noncommercial
+                                <input type="checkbox" name="cct" value="3"> No Derivative Works
+                            </div>
+                        </fieldset>
+                    </div>
+                    <br>
+                    <div>
+                        <input type="checkbox" value="4"><label>I accept the software license</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Rate this photo:</label>
+                            <input type="number" name="rate" class="form-control">
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-7 form-group">
+                            <label>Color Collection:</label>
+                            <input type="color" name="color" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Date Taken:</label>
+                            <br>
+                            <input type="date" name="date" class="form-control">
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5 form-group">
+                            <label>Time Taken:</label>
+                            <br>
+                            <input type="time" name="time" class="form-control">
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                        <button type="reset" class="btn btn-secondary">Clear</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</main>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
