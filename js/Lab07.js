@@ -1,0 +1,181 @@
+let select1 = document.getElementById("main-menu-select");
+let select2 = document.getElementById("tablechoose-select");
+let colnumber = document.getElementById("colnumber");
+let btn = document.getElementById("commit");
+let newtable = document.getElementById("newTable");
+let attr = document.getElementById("attribute");
+let showtable = document.getElementById("lay-table");
+let tables = [];
+let attrs = [];
+
+select1.onchange = function () {
+    newtable.style.display = "none";
+    attr.style.display = "none";
+    switch (select1.value) {
+        case "": {
+            btn.style.display = "none";
+            break;
+        }
+        case "1": {
+            newtable.style.display = "inline";
+            break;
+        }
+        case "2": {
+            attr.style.display = "inline";
+            if (select2.value != "select")
+		btn.style.display = "inline";
+            addRow();
+            break;
+        }
+        case "3": {
+            attr.style.display = "inline";
+            if (select2.value != "select"){
+                createAttribute(tables[select2.value].getElementsByTagName("th").length);
+		btn.style.display = "inline";
+	    }
+            break;
+        }
+        case "4": {
+            if (select2.value != "select")
+		btn.style.display = "inline";
+            break;
+        }
+    }
+
+};
+
+colnumber.onchange = function () {
+    let number = parseInt(colnumber.value);
+    if (number > 0 && number < 11) {
+        btn.style.display = "inline";
+        attr.style.display = "inline";
+        createAttribute(number);
+    }
+};
+
+function createAttribute(number) {
+    while (attr.hasChildNodes()) {
+        attr.removeChild(attr.firstChild);
+    }
+
+    for (let i = 0; i < number; i++) {
+        attrs[i] = document.createElement("input");
+        attrs[i].type = "text";
+        attrs[i].placeholder = "Attribute";
+        attrs[i].style.width = 146 + "px";
+        attrs[i].style.fontSize = "20px";
+        attr.appendChild(attrs[i]);
+
+    }
+}
+
+btn.onclick = function () {
+    switch (select1.value) {
+        case "1": {
+            let tablename = document.getElementById("tablename").value;
+            addopt(tablename);
+            tables[tablename] = document.createElement("table");
+            let thead = document.createElement("thead");
+            for (let i = 0; i < parseInt(colnumber.value); i++) {
+                let th = document.createElement("th");
+                th.innerHTML = attrs[i].value;
+                thead.appendChild(th);
+            }
+            tables[tablename].appendChild(thead);
+            createTable(tables[tablename]);
+            createAttribute(0);
+            break;
+        }
+        case "2": {
+            let tr = document.createElement("tr");
+            for (let i = 0; i < tables[select2.value].getElementsByTagName("th").length; i++) {
+                let td = document.createElement("td");
+                td.innerHTML = attrs[i].value;
+                tr.appendChild(td);
+            }
+            tables[select2.value].appendChild(tr);
+            createAttribute(tables[select2.value].getElementsByTagName("th").length);
+            break;
+        }
+        case "3": {
+            if (select2.value == "select")
+                return false;
+            let trs = tables[select2.value].getElementsByTagName("tr");
+            if (trs.length === 0) {
+                break;
+            }
+            for (let i = 0; i < trs.length; i++) {
+                let judge = true;
+                let tds = trs[i].getElementsByTagName("td");
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML !== attrs[j].value) {
+                        judge = false;
+                    }
+                }
+                if (judge) {
+                    tables[select2.value].removeChild(trs[i]);
+                    createAttribute(tables[select2.value].getElementsByTagName("th").length);
+                }
+            }
+            createAttribute(tables[select2.value].getElementsByTagName("th").length);
+            break;
+        }
+        case "4": {
+            delopt();
+            break;
+        }
+    }
+    return false;
+};
+
+function addRow() {
+    let numbers = 0;
+    if (select2.value != "select")
+        numbers = tables[select2.value].getElementsByTagName("th").length;
+    else {
+        return;
+    }
+    createAttribute(numbers);
+}
+
+function createTable(table) {
+    if (showtable.firstChild)
+        showtable.removeChild(showtable.firstChild);
+    if (select2.value == "select")
+        return;
+    showtable.appendChild(table);
+}
+
+select2.onchange = function () {
+    createTable(tables[select2.value]);
+    if (select2.value == "select")
+        return;
+    if (select1.value == "2" || "3")
+        createAttribute(tables[select2.value].getElementsByTagName("th").length);
+};
+
+function addopt(optionValue) {
+    let option = document.createElement("option");
+    select2.appendChild(option);
+    option.innerHTML = optionValue;
+    option.value = optionValue;
+    option.selected = true;
+}
+
+function delopt() {
+    let options = select2.getElementsByTagName("option");
+    if (select2.value == "select") {
+        alert("WARNING: You cannot undo this action!")
+        return;
+    }
+    for (let option of options) {
+        if (option.selected) {
+            select2.removeChild(option);
+            tables[option.value] = "";
+            if (select2.getElementsByTagName("option")[1])
+                select2.getElementsByTagName("option")[1].selected = true;
+            createTable(tables[select2.getElementsByTagName("option")[1].value]);
+            return;
+        }
+    }
+}

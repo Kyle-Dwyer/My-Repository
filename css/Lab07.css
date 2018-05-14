@@ -1,0 +1,83 @@
+body {
+    background-color: white;
+}
+
+p, h1, h2, h3, ul, li {
+    padding: 0;
+    margin: 0;
+}
+
+form {
+    text-align: center;
+    margin-top: 50px;
+}
+
+select {
+    width: 300px;
+    font-size: 22px;
+    font-weight: initial;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#newTable {
+    display: none;
+    width: 300px;
+    margin-bottom: 10px;
+}
+
+#tablename {
+    width: 146px;
+    font-size: 20px;
+    margin-right: 4px;
+}
+
+#colnumber {
+    width: 150px;
+    font-size: 20px;
+}
+
+#attribute {
+    text-align: center;
+    display: inline;
+}
+
+#attribute input {
+    margin-top: 10px;
+    margin-right: 2px;
+    font-size: 20px;
+}
+
+button {
+    margin: 10px auto;
+    display: none;
+    margin-top: 10px;
+    border: solid 1.5px lightgrey;
+    font-size: 20px;
+    width: 310px;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+}
+
+table {
+    border: 0;
+    margin: 0 auto;
+}
+
+th {
+    background-color: grey;
+    color: whitesmoke;
+}
+
+tr:nth-child(odd) {
+    background-color: lightgrey;
+}
+
+td {
+    padding: 0 0.5em;
+}
+
+.grey {
+    background-color: lightgrey;
+}
