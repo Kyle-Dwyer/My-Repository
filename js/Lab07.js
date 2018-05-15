@@ -35,7 +35,7 @@ select1.onchange = function () {
         case "3": {
             attr.style.display = "inline";
             if (select2.value != "select") {
-                changeAttribute(tables[select2.value].getElementsByTagName("th").length);
+                changeAttribute(tables[select2.value].getElementsByTagName("th").length,tables[select2.value].getElementsByTagName("th"));
                 btn.style.display = "inline";
             }
             break;
@@ -60,7 +60,7 @@ colnumber.onchange = function () {
     }
 };
 
-function changeAttribute(number) {
+function changeAttribute(number, name = []) {
     //delete
     while (attr.hasChildNodes()) {
         attr.removeChild(attr.firstChild);
@@ -69,7 +69,10 @@ function changeAttribute(number) {
     for (let i = 0; i < number; i++) {
         attrs[i] = document.createElement("input");
         attrs[i].type = "text";
-        attrs[i].placeholder = "Attribute";
+        if (name[i]) {
+            attrs[i].placeholder = name[i].innerHTML;
+        }
+        else attrs[i].placeholder = "Attribute";
         attrs[i].style.width = 146 + "px";
         attrs[i].style.fontSize = "20px";
         attr.appendChild(attrs[i]);
@@ -101,7 +104,7 @@ btn.onclick = function () {
                 tr.appendChild(td);
             }
             tables[select2.value].appendChild(tr);
-            changeAttribute(tables[select2.value].getElementsByTagName("th").length);
+            changeAttribute(tables[select2.value].getElementsByTagName("th").length,tables[select2.value].getElementsByTagName("th"));
             break;
         }
         case "3": {
@@ -121,10 +124,10 @@ btn.onclick = function () {
                 }
                 if (judge) {
                     tables[select2.value].removeChild(trs[i]);
-                    changeAttribute(tables[select2.value].getElementsByTagName("th").length);
+                    changeAttribute(tables[select2.value].getElementsByTagName("th").length,tables[select2.value].getElementsByTagName("th"));
                 }
             }
-            changeAttribute(tables[select2.value].getElementsByTagName("th").length);
+            changeAttribute(tables[select2.value].getElementsByTagName("th").length,tables[select2.value].getElementsByTagName("th"));
             break;
         }
         case "4": {
@@ -142,7 +145,7 @@ function addRow() {
     else {
         return;
     }
-    changeAttribute(numbers);
+    changeAttribute(numbers,tables[select2.value].getElementsByTagName("th"));
 }
 
 function createTable(table) {
@@ -158,7 +161,7 @@ select2.onchange = function () {
     if (select2.value == "select")
         return;
     if (select1.value == "2" || "3")
-        changeAttribute(tables[select2.value].getElementsByTagName("th").length);
+        changeAttribute(tables[select2.value].getElementsByTagName("th").length,tables[select2.value].getElementsByTagName("th"));
 };
 
 function addopt(optionValue) {
@@ -183,7 +186,7 @@ function delopt() {
             if (select2.getElementsByTagName("option")[1]) {
                 select2.getElementsByTagName("option")[1].selected = true;
                 createTable(tables[select2.getElementsByTagName("option")[1].value]);
-            }else
+            } else
                 createTable(tables["select"]);
             return;
         }
