@@ -77,7 +77,3 @@ tr:nth-child(odd) {
 td {
     padding: 0 0.5em;
 }
-
-.grey {
-    background-color: lightgrey;
-}

@@ -1,43 +1,50 @@
-let select1 = document.getElementById("main-menu-select");
-let select2 = document.getElementById("tablechoose-select");
-let colnumber = document.getElementById("colnumber");
-let btn = document.getElementById("commit");
-let newtable = document.getElementById("newTable");
-let attr = document.getElementById("attribute");
-let showtable = document.getElementById("lay-table");
-let tables = [];
-let attrs = [];
+let select1 = document.getElementById("main-menu-select");//the first select
+let select2 = document.getElementById("tablechoose-select");//the second select
+let colnumber = document.getElementById("colnumber");//input for colnumber
+let btn = document.getElementById("commit");//commit button
+let newtable = document.getElementById("newTable");//div for inputs to create table
+let attr = document.getElementById("attribute");//div for inputs for attributes
+let showtable = document.getElementById("table");//div for table
+let tables = [];//storage tables
+let attrs = [];//storage inputs for attributes
 
 select1.onchange = function () {
     newtable.style.display = "none";
     attr.style.display = "none";
     switch (select1.value) {
+        //select
         case "": {
             btn.style.display = "none";
             break;
         }
+        //create table
         case "1": {
             newtable.style.display = "inline";
             break;
         }
+        //add row
         case "2": {
+            if (select2.value != "select") {
+                btn.style.display = "inline";
+            }
             attr.style.display = "inline";
-            if (select2.value != "select")
-		btn.style.display = "inline";
             addRow();
             break;
         }
+        //delete row
         case "3": {
             attr.style.display = "inline";
-            if (select2.value != "select"){
-                createAttribute(tables[select2.value].getElementsByTagName("th").length);
-		btn.style.display = "inline";
-	    }
+            if (select2.value != "select") {
+                changeAttribute(tables[select2.value].getElementsByTagName("th").length);
+                btn.style.display = "inline";
+            }
             break;
         }
+        //delete table
         case "4": {
-            if (select2.value != "select")
-		btn.style.display = "inline";
+            if (select2.value != "select") {
+                btn.style.display = "inline";
+            }
             break;
         }
     }
@@ -49,15 +56,16 @@ colnumber.onchange = function () {
     if (number > 0 && number < 11) {
         btn.style.display = "inline";
         attr.style.display = "inline";
-        createAttribute(number);
+        changeAttribute(number);
     }
 };
 
-function createAttribute(number) {
+function changeAttribute(number) {
+    //delete
     while (attr.hasChildNodes()) {
         attr.removeChild(attr.firstChild);
     }
-
+    //create
     for (let i = 0; i < number; i++) {
         attrs[i] = document.createElement("input");
         attrs[i].type = "text";
@@ -65,7 +73,6 @@ function createAttribute(number) {
         attrs[i].style.width = 146 + "px";
         attrs[i].style.fontSize = "20px";
         attr.appendChild(attrs[i]);
-
     }
 }
 
@@ -83,7 +90,7 @@ btn.onclick = function () {
             }
             tables[tablename].appendChild(thead);
             createTable(tables[tablename]);
-            createAttribute(0);
+            changeAttribute(0);
             break;
         }
         case "2": {
@@ -94,7 +101,7 @@ btn.onclick = function () {
                 tr.appendChild(td);
             }
             tables[select2.value].appendChild(tr);
-            createAttribute(tables[select2.value].getElementsByTagName("th").length);
+            changeAttribute(tables[select2.value].getElementsByTagName("th").length);
             break;
         }
         case "3": {
@@ -114,10 +121,10 @@ btn.onclick = function () {
                 }
                 if (judge) {
                     tables[select2.value].removeChild(trs[i]);
-                    createAttribute(tables[select2.value].getElementsByTagName("th").length);
+                    changeAttribute(tables[select2.value].getElementsByTagName("th").length);
                 }
             }
-            createAttribute(tables[select2.value].getElementsByTagName("th").length);
+            changeAttribute(tables[select2.value].getElementsByTagName("th").length);
             break;
         }
         case "4": {
@@ -135,7 +142,7 @@ function addRow() {
     else {
         return;
     }
-    createAttribute(numbers);
+    changeAttribute(numbers);
 }
 
 function createTable(table) {
@@ -151,7 +158,7 @@ select2.onchange = function () {
     if (select2.value == "select")
         return;
     if (select1.value == "2" || "3")
-        createAttribute(tables[select2.value].getElementsByTagName("th").length);
+        changeAttribute(tables[select2.value].getElementsByTagName("th").length);
 };
 
 function addopt(optionValue) {
@@ -165,7 +172,7 @@ function addopt(optionValue) {
 function delopt() {
     let options = select2.getElementsByTagName("option");
     if (select2.value == "select") {
-        alert("WARNING: You cannot undo this action!")
+        alert("WARNING: You cannot undo this action!");
         return;
     }
     for (let option of options) {
