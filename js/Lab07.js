@@ -175,13 +175,16 @@ function delopt() {
         alert("WARNING: You cannot undo this action!");
         return;
     }
-    for (let option of options) {
+    for (let i = 0; i < options.length; i++) {
+        let option = options[i];
         if (option.selected) {
             select2.removeChild(option);
             tables[option.value] = "";
-            if (select2.getElementsByTagName("option")[1])
+            if (select2.getElementsByTagName("option")[1]) {
                 select2.getElementsByTagName("option")[1].selected = true;
-            createTable(tables[select2.getElementsByTagName("option")[1].value]);
+                createTable(tables[select2.getElementsByTagName("option")[1].value]);
+            }else
+                createTable(tables["select"]);
             return;
         }
     }
