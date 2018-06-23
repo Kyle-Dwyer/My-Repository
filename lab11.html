@@ -1,0 +1,441 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LRC 歌词编辑器</title>
+    <style>
+        nav ul {
+            position: fixed;
+            z-index: 99;
+            right: 5%;
+            border: 1px solid darkgray;
+            border-radius: 5px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .tab {
+            padding: 1em;
+            display: block;
+        }
+
+        .tab:hover {
+            cursor: pointer;
+            background-color: lightgray !important;
+        }
+
+        td {
+            padding: 0.2em;
+        }
+
+        textarea[name="edit_lyric"] {
+            width: 100%;
+            height: 50em;
+        }
+
+        input[type="button"] {
+            width: 100%;
+            height: 100%;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            height: 100%;
+        }
+
+        #td_submit {
+            text-align: center;
+        }
+
+        select {
+            display: block;
+        }
+
+        #lyric {
+            width: 35%;
+            height: 340px;
+            border: 0;
+            resize: none;
+            font-size: large;
+            line-height: 2em;
+            text-align: center;
+            border: 1px grey solid;
+        }
+
+        #lyric #words {
+            transition: all 0.5s ease;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        #words li {
+            height: 40px;
+            line-height: 40px;
+        }
+
+        #words .sel {
+            color: red;
+            font-weight: bold;
+        }
+
+        ul, li {
+            margin: 0 auto;
+            padding: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <ul>
+        <li id="d_edit" class="tab">Edit Lyric</li>
+        <li id="d_show" class="tab">Show Lyric</li>
+    </ul>
+</nav>
+
+<!--歌词编辑部分-->
+<section id="s_edit" class="content">
+    <form id="f_upload" enctype="multipart/form-data" action='lab11.php' name='flyric' method="post">
+        <p>请上传音乐文件</p>
+
+        <!--TODO: 在这里补充 html 元素，使 file_upload 上传后若为音乐文件，则可以直接播放-->
+        <audio src="" controls="controls" autoplay id="audio" name="audio">
+        </audio>
+        <br>
+        <input type="file" name="file_upload">
+        <table>
+            <tr>
+                <td>Title: <input type="text" id="title" name="title"></td>
+                <td>Artist: <input type="text" id="artist" name="artist"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><textarea name="edit_lyric" id="edit_lyric"></textarea></td>
+            </tr>
+            <tr>
+                <td><input type="button" value="插入时间标签" id="insert"></td>
+                <td><input type="button" value="替换时间标签" id="replace"></td>
+            </tr>
+            <tr>
+                <td colspan="2" id="td_submit"><input type="submit" value="Submit"></td>
+            </tr>
+        </table>
+    </form>
+</section>
+
+<!--歌词展示部分-->
+<section id="s_show" class="content">
+    <select>
+        <!--TODO: 在这里补充 html 元素，使点开 #d_show 之后这里实时加载服务器中已有的歌名-->
+        <option value="0">请选择音乐</option>
+    </select>
+    <br>
+
+    <div id="lyric" style="overflow: scroll;">
+        <ul id="words"></ul>
+    </div>
+
+    <!--TODO: 在这里补充 html 元素，使选择了歌曲之后这里展示歌曲进度条，并且支持上下首切换-->
+    <br>
+    <audio src="" controls="controls" id="audio_show" autoplay></audio>
+    <br>
+    <button type="button" title="" id="last">上一首</button>
+    <button type="button" title="" id="next">下一首</button>
+</section>
+</body>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script>
+    // 界面部分
+    document.getElementById("d_edit").onclick = function () {
+        click_tab("edit");
+    };
+    document.getElementById("d_show").onclick = function () {
+        click_tab("show");
+    };
+
+    document.getElementById("d_show").click();
+
+    function click_tab(tag) {
+        for (let i = 0; i < document.getElementsByClassName("tab").length; i++) document.getElementsByClassName("tab")[i].style.backgroundColor = "transparent";
+        for (let i = 0; i < document.getElementsByClassName("content").length; i++) document.getElementsByClassName("content")[i].style.display = "none";
+
+        document.getElementById("s_" + tag).style.display = "block";
+        document.getElementById("d_" + tag).style.backgroundColor = "darkgray";
+    }
+
+    // Edit 部分
+    var edit_lyric_pos = 0;
+    document.getElementById("edit_lyric").onmouseleave = function () {
+        edit_lyric_pos = document.getElementById("edit_lyric").selectionStart;
+    };
+
+    // 获取所在行的初始位置。
+    function get_target_pos(n_pos) {
+        if (n_pos === undefined) n_pos = edit_lyric_pos;
+        let value = document.getElementById("edit_lyric").value;
+        let pos = 0;
+        for (let i = n_pos; i >= 0; i--) {
+            if (value.charAt(i) === '\n') {
+                pos = i + 1;
+                break;
+            }
+        }
+        return pos;
+    }
+
+    // 选中所在行。
+    function get_target_line(n_pos) {
+        let value = document.getElementById("edit_lyric").value;
+        let f_pos = get_target_pos(n_pos);
+        let l_pos = 0;
+
+        for (let i = f_pos; i < value.length; i++) {
+            if (value.charAt(i) === '\n') {
+                l_pos = i + 1;
+                break;
+            }
+        }
+        return [f_pos, l_pos];
+    }
+
+    //自动播放
+    document.getElementsByName("file_upload")[0].onchange = function () {
+        var path = this.value;
+        var check = path.substring(path.lastIndexOf(".")).toLowerCase();
+        if (check.match(/mp3|wav|wma|ogg|ape|acc/)) {
+            document.getElementById("audio").src = window.URL.createObjectURL(this.files[0]);
+            var msg = path.substring(path.lastIndexOf("\\") + 1, path.lastIndexOf("."));
+            if (msg.indexOf(' - ') === -1) {
+                document.getElementById("title").value = msg;
+                document.getElementById("artist").value = "未知艺术家";
+            } else {
+                document.getElementById("artist").value = msg.split(' - ', 2)[0];
+                document.getElementById("title").value = msg.split(' - ', 2)[1];
+            }
+        }
+    };
+
+    /* HINT:
+     * 已经帮你写好了寻找每行开头的位置，可以使用 get_target_pos()
+     * 来获取第一个位置，从而插入相应的歌词时间。
+     * 在 textarea 中，可以通过这个 DOM 节点的 selectionStart 和
+     * selectionEnd 获取相对应的位置。
+     *
+     * TODO: 请实现你的歌词时间标签插入效果。
+     */
+    //插入标签
+    document.getElementById("insert").onclick = function () {
+        if (document.getElementById("audio").getAttribute("src") !== "") {
+            var currentTime = document.getElementById('audio').currentTime;
+            var hour = parseInt(currentTime / 3600)//时
+            if (hour < 10) {
+                hour = "0" + hour;
+            }
+            var minute = currentTime / 60;
+            minute = parseInt(minute);//分
+            if (minute < 10) {
+                minute = "0" + minute;
+            }
+            var second = (currentTime % 60).toFixed(2)//秒
+            if (second < 10) {
+                second = "0" + second;
+            }
+            if (!document.getElementById("edit_lyric").value || document.getElementById("edit_lyric").value.charAt(get_target_pos()) === "[" || document.getElementById("edit_lyric").value.charAt(get_target_pos()) === "") {
+                document.getElementById("edit_lyric").value += "[" + hour + ':' + minute + ":" + second + "]" + '\n';
+            }
+
+            else {
+                var value = document.getElementById("edit_lyric").value;
+                document.getElementById("edit_lyric").value = value.substring(0, get_target_pos()) + "[" + hour + ':' + minute + ":" + second + "]" + value.substring(get_target_pos(), value.length);
+            }
+        } else {
+            alert('请先导入音乐文件');
+        }
+    };
+
+    //替换标签
+    document.getElementById("replace").onclick = function () {
+        if (document.getElementById("audio").getAttribute("src") !== "") {
+            var currentTime = document.getElementById('audio').currentTime;
+            var hour = parseInt(currentTime / 3600)//时
+            if (hour < 10) {
+                hour = "0" + hour;
+            }
+            var minute = currentTime / 60;
+            minute = parseInt(minute);//分
+            if (minute < 10) {
+                minute = "0" + minute;
+            }
+            var second = (currentTime % 60).toFixed(2)//秒
+            if (second < 10) {
+                second = "0" + second;
+            }
+
+            var value = document.getElementById("edit_lyric").value;
+            document.getElementById("edit_lyric").value = value.replace(value.substring(get_target_line()[0], get_target_line()[1]), "[" + hour + ':' + minute + ":" + second + "]" + '\n');
+        } else {
+            alert('请先导入音乐文件');
+        }
+    };
+
+    /* TODO: 请实现你的上传功能，需包含一个音乐文件和你写好的歌词文本。
+     */
+    document.getElementById("td_submit").onclick = function () {
+        if (document.getElementById("audio").getAttribute("src") !== "") {
+            if (!document.getElementById("edit_lyric").value) {
+                alert('请输入歌词');
+                return false;
+            }
+        } else {
+            alert('请先导入音乐文件');
+            return false;
+        }
+    };
+
+    /* HINT:
+     * 实现歌词和时间的匹配的时候推荐使用 Map class，ES6 自带。
+     * 在 Map 中，key 的值必须是字符串，但是可以通过字符串直接比较。
+     * 每一行行高可粗略估计为 40，根据电脑差异或许会有不同。
+     * 当前歌词请以粗体显示。
+     * 从第八行开始，当歌曲转至下一行的时候，需要调整滚动条，使得当前歌
+     * 词保持在正中。
+     *
+     * TODO: 请实现你的歌词滚动效果。
+     */
+    //获取歌单
+    $.ajax({
+        type: "GET",
+        url: 'lab11.php',
+        success: function (data) {
+            var mydir = JSON.parse(data);
+            if (mydir.length) {
+                var select = $("#s_show select")[0];
+                for (let i = 0; i < mydir.length; i++) {
+                    var newoption = document.createElement("option");
+                    $(newoption).val(mydir[i]).html(mydir[i].split('.')[0]);
+                    select.appendChild(newoption);
+                }
+            }
+        }
+    })
+
+    //获取歌词
+    $("#s_show select").change(function () {
+        changesongs($(this).val());
+    });
+
+    //换歌
+    function changesongs(val) {
+        if (val !== "0") {
+            var value = val;
+            $("#audio_show").attr("src", "./upload/" + value);
+            $("#words li").remove();
+            $.ajax({
+                url: "lab11.php",
+                type: "GET",
+                data: {"value": value.split(".")[0]},
+                success(msg) {
+                    //拆分歌词
+                    var lyric = msg.split("\n");
+                    var lyrics = [];
+                    lyrics.push({time: 0, lyric: "<b>" + lyric[0] + "   " + lyric[1] + "</b>"});
+                    for (var i = 1; i < lyric.length; i++) {
+                        var timedata = /\d+:\d+:\d+.\d/.exec(lyric[i]);
+                        var lyricdata = lyric[i].split(/[\[]\d+:\d+:\d+.\d+[\]]/)[1];
+                        if (timedata != null) {
+                            lyrics.push({time: formatTime(String(timedata)), lyric: lyricdata});
+                        }
+                    }
+                    //HTML框架
+                    for (var i = 0; i < lyrics.length; i++) {
+                        var lyricBorder = document.getElementById('words');
+                        var lyric1 = document.createElement('li');
+                        lyric1.innerHTML = lyrics[i].lyric;
+                        lyricBorder.appendChild(lyric1);
+                    }
+                    //随时间变化
+                    let audio = document.getElementById('audio_show');
+                    let count = 0;
+                    //时间判断
+                    let vaildTime = function (time, index) {
+                        if (index < lyrics.length - 1) {
+                            if (time >= lyrics[index].time && time <= lyrics[index + 1].time) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            if (time <= audio.duration) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+
+                    };
+
+                    let wordEl = document.getElementById('words');
+                    //随时间歌词颜色和位置变化
+                    audio.ontimeupdate = function () {
+                        let time = audio.currentTime;
+                        if (!vaildTime(time, count)) {
+                            count++;
+                        }
+                        let li = wordEl.querySelectorAll('li');
+                        if (count > 7 && li.length - count > 4)
+                            $("#lyric").scrollTop(40 * (count - 3));
+                        // document.getElementById('lyric').setAttribute('scrollTop', 40 * (count - 5));
+                        // let marTop = parseInt(document.getElementById('lyric').style.marginTop) ;
+                        // document.getElementById('lyric').setAttribute('margin-top', (marTop - count * 40) + 'px');
+                        for (let i = 0; i < li.length; i++) {
+                            li[i].removeAttribute('class');
+                        }
+                        wordEl.querySelectorAll('li')[count].setAttribute('class', 'sel');
+                        if (audio.ended) {
+                            // wordEl.style.marginTop = marTop + 'px';
+                            count = 0;
+                        }
+                    };
+                    //调整进度
+                    audio.onseeked = function () {
+                        let cur_time = audio.currentTime;
+                        for (let i = 0; i <= lyrics.length - 1; i++) {
+                            if (cur_time >= lyrics[i].time && cur_time <= lyrics[i + 1].time)
+                                count = i;
+                        }
+                    }
+
+
+                }
+            })
+        } else
+            $("#audio_show").attr("src", "");
+
+    }
+
+    //时间转换
+    function formatTime(time) {
+        var h = time.split(':')[0];
+        var m = time.split(':')[1];
+        var s = time.split(':')[2];
+        return Number(h) * 3600 + Number(m) * 60 + Number(s);
+    }
+
+    //上一首
+    $("#last").click(function () {
+        if ($("#s_show option:selected").index() > 1) {
+            $("#s_show select")[0].selectedIndex = $("#s_show option:selected").index() - 1;
+            changesongs($("#s_show select").val());
+        }
+
+    });
+    //下一首
+    $("#next").click(function () {
+        if ($("#s_show option:selected").index() < $("#s_show option").length - 1) {
+            $("#s_show select")[0].selectedIndex = $("#s_show option:selected").index() + 1;
+            changesongs($("#s_show select").val());
+        }
+
+    });
+</script>
+</html>
